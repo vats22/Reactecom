@@ -1,17 +1,25 @@
 import React from 'react'
 // import { IndividualProduct } from './IndividualProduct';
 
-export const Products = ({allProducts}) => {
+export const Products = ({allProducts,addTocart}) => {
 
     // console.log(products);
     
     return allProducts.map((oneProduct)=>(
-        <SingleProduct key = {oneProduct.ID} oneProduct={oneProduct}/>
+        <SingleProduct key = {oneProduct.ID} oneProduct={oneProduct}
+        addTocart={addTocart}/>
     ))
 }
 
-const SingleProduct = ({oneProduct})=>{
+const SingleProduct = ({oneProduct,addTocart})=>{
     console.log("from singleProduct:" + oneProduct);
+
+    const  handelAddtocart= ()=>{
+
+        addTocart(oneProduct)
+    }
+
+
     return(
         
         <div className='product'>
@@ -22,7 +30,7 @@ const SingleProduct = ({oneProduct})=>{
             <div className='product-text description'>{oneProduct.description}</div>
             <div className='product-text price'>$ {oneProduct.price}</div>
             <div className='product-text price'> Quantity: {oneProduct. quantity}</div>
-            <div className='btn btn-info btn-md cart-btn'>ADD TO CART</div>
+            <div className='btn btn-info btn-md cart-btn' onClick={handelAddtocart}>ADD TO CART</div>
         </div> 
     )
 }

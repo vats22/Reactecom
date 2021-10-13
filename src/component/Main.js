@@ -1,8 +1,9 @@
 import React,{ useEffect,useState } from 'react'
 import { auth,fs } from '../Config/config'
+import { useHistory } from 'react-router'
 import Hader from './Hader'
 import { Products } from './Products'
-export const Main = () => {
+export const Main = (props) => {
 
     function CurrentUser(){
         const[user, setuser] = useState(null);
@@ -46,6 +47,39 @@ export const Main = () => {
         getProducts();
     },[])
 
+    // gettin current user uid
+    function GetUserUid() {
+        const [Useruid, setUseruid] = useState(null);
+        useEffect(() => {
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    setUseruid(user.uid);
+                }
+            })
+        }, [])
+        return Useruid;
+    }
+
+    const uid = GetUserUid();
+
+    let selectProduct;
+    const addTocart = (selectProduct) => {
+        if (uid !== null) {
+            console.log(selectProduct);
+            selectProduct = selectProduct;
+            selectProduct["qty"]=1;
+            selectProduct["ProductTotalPrice"]= selectProduct.qty * selectProduct.price;
+            fs.collection("Cart" + uid).doc(selectProduct.ID).set(selectProduct).then(()=>{
+                console.log("product add in to the CART");
+            })
+           
+        }
+        else {
+            props.history.push('/login');
+        }
+
+    }
+
     return (
        <>
             <Hader user={loginUser} />
@@ -55,12 +89,12 @@ export const Main = () => {
                     <h1 className='text-center text-bold font-weight-bold fs-1'>Products</h1>
                     <hr/>
                     <div className='products-box'>
-                        <Products allProducts={products}/>
+                        <Products allProducts={products} addTocart={addTocart}/>
                     </div>
                 </div>
             )}
             {products.length < 1 && (
-                <div className='container text-bold '>Please wait....</div>
+                <div className='container text-bold fs-1 '>Please wait....</div>
             )}
        </>
     )
