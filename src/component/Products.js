@@ -1,17 +1,17 @@
 import React from 'react'
-// import { IndividualProduct } from './IndividualProduct';
+
 
 export const Products = ({allProducts,addTocart}) => {
 
     // console.log(products);
     
     return allProducts.map((oneProduct)=>(
-        <SingleProduct key = {oneProduct.ID} oneProduct={oneProduct}
+        <DisplayProduct key = {oneProduct.ID} oneProduct={oneProduct}
         addTocart={addTocart}/>
     ))
 }
 
-const SingleProduct = ({oneProduct,addTocart})=>{
+const DisplayProduct = ({oneProduct,addTocart})=>{
     console.log("from singleProduct:" + oneProduct);
 
     const  handelAddtocart= ()=>{

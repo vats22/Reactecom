@@ -1,6 +1,5 @@
 import React,{ useEffect,useState } from 'react'
 import { auth,fs } from '../Config/config'
-import { useHistory } from 'react-router'
 import Hader from './Hader'
 import { Products } from './Products'
 export const Main = (props) => {
@@ -34,7 +33,7 @@ export const Main = (props) => {
         console.log("My Products:" + myProducts);
         for(var product of products.docs){
             var data = product.data();
-            data.Id = product.id;
+            data.ID = product.id;
             myProducts.push({...data});
             if(myProducts.length === products.docs.length){
                 setproducts(myProducts);
@@ -61,7 +60,7 @@ export const Main = (props) => {
     }
 
     const uid = GetUserUid();
-
+    
     let selectProduct;
     const addTocart = (selectProduct) => {
         if (uid !== null) {
@@ -69,7 +68,7 @@ export const Main = (props) => {
             selectProduct = selectProduct;
             selectProduct["qty"]=1;
             selectProduct["ProductTotalPrice"]= selectProduct.qty * selectProduct.price;
-            fs.collection("Cart" + uid).doc(selectProduct.ID).set(selectProduct).then(()=>{
+            fs.collection("Cart"+ " " + uid).doc(selectProduct.ID).set(selectProduct).then(()=>{
                 console.log("product add in to the CART");
             })
            
