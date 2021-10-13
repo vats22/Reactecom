@@ -44,8 +44,8 @@ export default function Hader({user}) {
                     <div><Link className='navlink' to="/">{user}</Link></div>
                     <div className='cart-menu-btn'>
                         <Link className='navlink' to="/cart">
-                        <span  class="nav-icon">
-                          <i class="fas fa-cart-plus"></i>
+                        <span  className="nav-icon">
+                          <i className="fas fa-cart-plus"></i>
                         </span>
                         </Link>
                         {/* <span className='cart-indicator'>{totalQty}</span> */}

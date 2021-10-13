@@ -28,9 +28,9 @@ export const Main = () => {
 
     const getProducts = async ()=>{
         const products = await fs.collection('Products').get();
-        console.log(" fatch products:" + products);
+        console.log("fatch products:" + products)
         let myProducts = [];
-        console.log("myProducts:" +  myProducts);
+        console.log("My Products:" + myProducts);
         for(var product of products.docs){
             var data = product.data();
             data.Id = product.id;
@@ -39,7 +39,7 @@ export const Main = () => {
                 setproducts(myProducts);
             }
         }
-        console.log("myProducts:" +  myProducts);
+        console.log("My Products:" + myProducts);
     }
 
     useEffect(()=>{
@@ -52,10 +52,10 @@ export const Main = () => {
             <br></br>
             {products.length > 0 && (
                 <div className='container'>
-                    <h1 className='text-center fw-bold'>Products</h1>
+                    <h1 className='text-center text-bold font-weight-bold fs-1'>Products</h1>
                     <hr/>
                     <div className='products-box'>
-                        <Products products={products}/>
+                        <Products allProducts={products}/>
                     </div>
                 </div>
             )}

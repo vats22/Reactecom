@@ -40,7 +40,7 @@ export const Addproduct = () => {
         const uploadTask=storage.ref(`product-images/${image.name}`).put(image);
         uploadTask.on('state_changed',snapshot=>{
             const progress = (snapshot.bytesTransferred/snapshot.totalBytes)*100
-            console.log(progress);
+            console.log("check progress:" + progress);
         },error=>setUploadError(error.message),()=>{
             storage.ref('product-images').child(image.name).getDownloadURL().then(url=>{
                 fs.collection('Products').add({
