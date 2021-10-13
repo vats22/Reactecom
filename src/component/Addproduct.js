@@ -70,7 +70,7 @@ export const Addproduct = () => {
         <div className='container'>
             <br></br>
             <br></br>
-            <h1>Add Products</h1>
+            <h1 className="text-center fw-bold">Add Products</h1>
             <hr></hr>        
             {successMsg&&<>
                 <div className='success-msg'>{successMsg}</div>
