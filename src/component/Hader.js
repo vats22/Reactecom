@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from "react-router-dom"
-import { auth } from '../Config/config'
+import { auth, fs } from '../Config/config'
 import { useHistory } from 'react-router'
+import { useEffect, useState } from 'react/cjs/react.development';
 
 
 export default function Hader({user}) {
@@ -16,6 +17,22 @@ export default function Hader({user}) {
     console.log("You suucessfully Singout");
 
   }
+
+  //get total number of products in fs and show that number up side of the cart icon
+
+  const[productTotal, setprouctTotal]=useState(0);
+  useEffect(()=>{
+    auth.onAuthStateChanged((getuser)=>{
+      if(getuser){
+        fs.collection('Cart ' + getuser.uid).onSnapshot((response)=>{
+          const allProduct = response.docs.length;
+          setprouctTotal(allProduct);
+        })
+      }else{
+        console.log("you have to log in")
+      }
+    })
+  },[])
 
   return (
     <>
@@ -51,11 +68,11 @@ export default function Hader({user}) {
                         <i class="fas fa-cart-plus"></i>
                     </span>
                   </Link>
-                <div class="cart-items">00</div>
+                <div class="cart-items text-bold">{productTotal}</div>
                 </div>
 
               <form >
-                <button className='btn btn-info btn-md me-2' onClick={onSingout}>Log Out</button>
+                <button className='btn btn-danger btn-md me-2' onClick={onSingout}>Log Out</button>
 
                 <Link className="text-decoration-none mr-3" to="add-product">
                   <button className='btn btn-info btn-md'>ADD Product</button>

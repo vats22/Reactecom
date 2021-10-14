@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import { auth, fs } from '../Config/config';
 import Hader from './Hader'
 import { SinglecartProduct } from './SinglecartProduct';
@@ -46,6 +47,21 @@ export const Cart = () => {
 
     console.log(cartProducts);
 
+    // calculate total qty
+    const allqty = cartProducts.map((products)=>{
+        return products.qty;
+    })
+
+    const calculateTotalqty = (a,b)=> a + b;
+    const totalQty = allqty.reduce(calculateTotalqty,0);
+    console.log(totalQty);
+
+    //calculate Total Price
+    const allPrice = cartProducts.map((products)=>products.ProductTotalPrice)
+    const calculateTotalprice = (a,b)=> a + b;
+    const totalPrice = allPrice.reduce(calculateTotalprice,0);
+    console.log(totalPrice);
+
     //Increase qty
     let manegproduct;
     const Increaseqty=(cartproduct)=>{
@@ -90,18 +106,35 @@ export const Cart = () => {
         }
     }
 
+    
+
     return (
         <>
             <Hader user={loginUser} />           
             <br></br>
             {cartProducts.length > 0 && (
                 <div className='container'>
-                    <h1 className='text-center text-bold font-weight-bold fs-1'>Cart</h1>
+                    <h1 className='text-center text-bold font-weight-bold fs-1'>Your Cart</h1>
                     <hr/>
                     <div className='products-box'>
                         <SinglecartProduct cartProducts={cartProducts} Increaseqty={Increaseqty} Decreaseqty={Decreaseqty}/>
                     </div>
+                    <div className='summary-box bg-info'>
+                        <h5 className="text-center fw-bold">Cart Summary</h5>
+                        <br></br>
+                        <div>
+                        Total No of Products: <span>{totalQty}</span>
+                        </div>
+                        <div>
+                        Total Price to Pay: <span>$ {totalPrice}</span>
+                        </div>
+                        <br></br>
+                        <Link className="text-decoration-none mr-3" to="/">
+                            <button className='btn btn-success btn-md' >Purches</button>
+                        </Link>
+                    </div>                                    
                 </div>
+               
             )}
             {cartProducts.length < 1 && (
                 <div className='container-fluid'>No products to show</div>
