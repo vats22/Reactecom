@@ -1,4 +1,5 @@
 import React from 'react'
+import { auth, fs } from '../Config/config'
 
 export const SinglecartProduct = ({cartProducts,Increaseqty,Decreaseqty}) => {
     return cartProducts.map((cartProduct)=>(
@@ -11,6 +12,18 @@ export const SinglecartProduct = ({cartProducts,Increaseqty,Decreaseqty}) => {
 
 const DisplayCartProduct = ({cartProduct,Increaseqty,Decreaseqty}) => {
  
+    const handrlDeletproduct = ()=>{
+        auth.onAuthStateChanged((getuser)=>{
+            if(getuser){
+                fs.collection('Cart ' + getuser.uid).doc(cartProduct.ID).delete()
+                .then(()=>console.log("you delete this product"))
+            }else{
+                console.log("please log in")
+            }
+        })
+    }
+    
+    
     const handelIncreaseqty= ()=>{
         Increaseqty(cartProduct)
     }
@@ -38,7 +51,7 @@ const DisplayCartProduct = ({cartProduct,Increaseqty,Decreaseqty}) => {
                 </div>
             </div>
             <div className='product-text cart-price'>Rs. {cartProduct.ProductTotalPrice}</div>
-            <div className='btn  btn-warning btn-lg cart-btn'>DELETE</div>            
+            <div className='btn  btn-warning btn-lg cart-btn' onClick={handrlDeletproduct}>DELETE</div>            
         </div>
     )
 }
