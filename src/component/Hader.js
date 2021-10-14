@@ -19,49 +19,49 @@ export default function Hader({user}) {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
-          <a className="navbar-brand fw-bold text-uppercase">Vat's-Store</a>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
+      
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/"> Vat's-Store</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            {!user&&<div>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-              {!user && <div>
-                <li className="nav-item">
-                  <a className="nav-link">
-                    <Link to='login'> Log In </Link>
-                  </a>
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/login">Log In</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/signup">Sing Up</a>
+                  </li>
+                </ul>
+              </div>
+            }
+            {user&&<div class="d-flex">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="/">{user}</a>
                 </li>
-                <li className="nav-item">
-                  <a className="nav-link">
-                    <Link to='signup'>Sign Up</Link>
-                  </a>
-                </li>
-              </div>}
-              {user && <>
-                <div><Link className='navlink' to="/">{user}</Link></div>
-                <div className='cart-menu-btn'>
-                  <Link className='navlink' to="/cart">
-                    <span className="nav-icon">
-                      <i className="fas fa-cart-plus"></i>
+              </ul>
+              <div routerLink="cart" class="cart-btn me-2">
+                  <Link to="/cart">
+                    <span  class="nav-icon">
+                        <i class="fas fa-cart-plus"></i>
                     </span>
                   </Link>
-                  {/* <span className='cart-indicator'>{totalQty}</span> */}
-                </div>
-                <div className='btn btn-info btn-md'
-                  onClick={onSingout}>LOGOUT</div>
-                <div className="float-left">
-                  <Link className="text-decoration-none mr-3" to="add-product">
-                    <button className='btn btn-info btn-md'>ADD Product</button>
-                  </Link>
+                <div class="cart-items">00</div>
                 </div>
 
+              <form >
+                <button className='btn btn-info btn-md me-2' onClick={onSingout}>Log Out</button>
 
-              </>}
-
-            </ul>
+                <Link className="text-decoration-none mr-3" to="add-product">
+                  <button className='btn btn-info btn-md'>ADD Product</button>
+                </Link>
+              </form>
+            </div>}
           </div>
         </div>
       </nav>

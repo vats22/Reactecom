@@ -46,6 +46,50 @@ export const Cart = () => {
 
     console.log(cartProducts);
 
+    //Increase qty
+    let manegproduct;
+    const Increaseqty=(cartproduct)=>{
+        console.log(cartproduct)
+        manegproduct = cartproduct;
+        manegproduct.qty = manegproduct.qty + 1;
+        manegproduct.quantity = manegproduct.quantity - manegproduct.qty;
+        manegproduct.ProductTotalPrice = manegproduct.qty * manegproduct.price;
+        console.log(manegproduct);
+        // update in fs
+        auth.onAuthStateChanged((getuser)=>{
+            if(getuser){
+                fs.collection('Cart ' + getuser.uid).doc(cartproduct.ID).update(manegproduct)
+                .then(()=>console.log("your qty has been Increased"))
+
+            }else{
+                console.log("please login")
+            }
+        })
+
+    }
+
+    //Decrease qty
+    const Decreaseqty = (cartproduct)=>{
+        console.log(cartproduct);
+        manegproduct = cartproduct;
+        if(manegproduct.qty > 1){
+            manegproduct.qty = manegproduct.qty - 1;
+            manegproduct.quantity = manegproduct.quantity - manegproduct.qty;
+            manegproduct.ProductTotalPrice = manegproduct.qty * manegproduct.price;
+            console.log("price: " + manegproduct.price)
+            console.log(manegproduct);
+            // updtae in fs
+            auth.onAuthStateChanged((getuser)=>{
+                if(getuser){
+                    fs.collection('Cart ' + getuser.uid).doc(cartproduct.ID).update(manegproduct)
+                    .then(()=>console.log("your qty hase been decreased"))
+                }else{
+                    console.log("you have to log in")
+                }
+            })
+        }
+    }
+
     return (
         <>
             <Hader user={loginUser} />           
@@ -55,7 +99,7 @@ export const Cart = () => {
                     <h1 className='text-center text-bold font-weight-bold fs-1'>Cart</h1>
                     <hr/>
                     <div className='products-box'>
-                        <SinglecartProduct cartProducts={cartProducts}/>
+                        <SinglecartProduct cartProducts={cartProducts} Increaseqty={Increaseqty} Decreaseqty={Decreaseqty}/>
                     </div>
                 </div>
             )}

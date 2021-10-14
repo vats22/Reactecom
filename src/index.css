@@ -174,9 +174,9 @@
   color: #e00a02;
 }
 
-.cart-btn{
+/* .cart-btn{
   background-color: #a3c8d69b !important;
-}
+} */
 
 .cart-menu-btn{
   position: relative;  
@@ -234,4 +234,26 @@
 .summary-box div{
   display: flex;
   justify-content: space-between;
+}
+
+
+/* ////// */
+
+.nav-icon {
+  font-size: 1.5rem;
+}
+.cart-btn {
+  position: relative;
+  cursor: pointer;
+  color: #d82e2e;
+  z-index: 1;
+}
+.cart-items {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  
+  padding: 0 5px;
+  border-radius: 30%;
+  color: #c78080;
 }

@@ -1,14 +1,24 @@
 import React from 'react'
 
-export const SinglecartProduct = ({cartProducts}) => {
+export const SinglecartProduct = ({cartProducts,Increaseqty,Decreaseqty}) => {
     return cartProducts.map((cartProduct)=>(
-        <DisplayCartProduct key={cartProduct.ID} cartProduct={cartProduct}/>
+        <DisplayCartProduct key={cartProduct.ID} cartProduct={cartProduct}
+        Increaseqty={Increaseqty} Decreaseqty={Decreaseqty} />
     ))
 
 
 }
 
-const DisplayCartProduct = ({cartProduct}) => {
+const DisplayCartProduct = ({cartProduct,Increaseqty,Decreaseqty}) => {
+ 
+    const handelIncreaseqty= ()=>{
+        Increaseqty(cartProduct)
+    }
+
+    const handelDecreaseqty= ()=>{
+        Decreaseqty(cartProduct)
+    }
+
     return (
         <div className='product'>
             <div className='product-img'>
@@ -20,15 +30,15 @@ const DisplayCartProduct = ({cartProduct}) => {
             <span>Quantity</span>
             <div className='product-text quantity-box'>
                 <div className='action-btns minus' >
-                    {/* <Icon icon={minus} size={20}/> */}
+                    <i class="fas fa-minus" onClick={handelDecreaseqty}></i>
                 </div>                
                 <div>{cartProduct.qty}</div>               
-                <div className='action-btns plus' >
-                    {/* <Icon icon={plus} size={20}/> */}
+                <div className='action-btns ' >
+                    <i class="fas fa-plus" onClick={handelIncreaseqty}></i>
                 </div>
             </div>
-            <div className='product-text cart-price'>Rs. {cartProduct.TotalProductPrice}</div>
-            <div className='btn btn-danger btn-md cart-btn'>DELETE</div>            
+            <div className='product-text cart-price'>Rs. {cartProduct.ProductTotalPrice}</div>
+            <div className='btn  btn-warning btn-lg cart-btn'>DELETE</div>            
         </div>
     )
 }
