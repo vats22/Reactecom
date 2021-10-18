@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { auth, fs } from '../Config/config';
+import { useHistory } from 'react-router';
 import Hader from './Hader'
 import { SinglecartProduct } from './SinglecartProduct';
 
@@ -65,22 +66,27 @@ export const Cart = () => {
     //Increase qty
     let manegproduct;
     const Increaseqty=(cartproduct)=>{
-        console.log(cartproduct)
+        // console.log(cartproduct)
         manegproduct = cartproduct;
-        manegproduct.qty = manegproduct.qty + 1;
-        manegproduct.quantity = manegproduct.quantity - manegproduct.qty;
-        manegproduct.ProductTotalPrice = manegproduct.qty * manegproduct.price;
-        console.log(manegproduct);
-        // update in fs
-        auth.onAuthStateChanged((getuser)=>{
-            if(getuser){
-                fs.collection('Cart ' + getuser.uid).doc(cartproduct.ID).update(manegproduct)
-                .then(()=>console.log("your qty has been Increased"))
+        console.log("cart qty:" + manegproduct.qty);
+        console.log("cart quantity:" + manegproduct.quantity);
+        if (manegproduct.qty < manegproduct.quantity) {
+            manegproduct.qty = manegproduct.qty + 1;
+            // manegproduct.quantity = manegproduct.quantity - manegproduct.qty;
+            manegproduct.ProductTotalPrice = manegproduct.qty * manegproduct.price;
+            console.log(manegproduct);
+            // update in fs
+            auth.onAuthStateChanged((getuser) => {
+                if (getuser) {
+                    fs.collection('Cart ' + getuser.uid).doc(cartproduct.ID).update(manegproduct)
+                        .then(() => console.log("your qty has been Increased"))
 
-            }else{
-                console.log("please login")
+                } else {
+                    console.log("please login")
             }
         })
+        }
+        
 
     }
 
@@ -90,7 +96,7 @@ export const Cart = () => {
         manegproduct = cartproduct;
         if(manegproduct.qty > 1){
             manegproduct.qty = manegproduct.qty - 1;
-            manegproduct.quantity = manegproduct.quantity - manegproduct.qty;
+            // manegproduct.quantity = manegproduct.quantity - manegproduct.qty;
             manegproduct.ProductTotalPrice = manegproduct.qty * manegproduct.price;
             console.log("price: " + manegproduct.price)
             console.log(manegproduct);
@@ -106,6 +112,36 @@ export const Cart = () => {
         }
     }
 
+    const history = useHistory();
+    const handelPurches = ()=>{
+        console.log("hello form handel purche:");
+        auth.onAuthStateChanged((getuser)=>{
+            console.log("getuser:" +  getuser.uid)
+
+            if(getuser){
+                const id = "Cart " + getuser.uid;
+                console.log(id);
+                const ref = fs.collection(id);
+                ref.onSnapshot((snapshot) => {
+                    snapshot.docs.forEach((doc) => {
+                      ref.doc(doc.id).delete()
+                    })
+                })
+                // setTimeout(()=>{
+                //     console.log("Your Cart Item Successfully Purchesd..");
+                //     history.push('/');
+                // },3000);
+
+            }else{
+                console.log("please log in");
+            }
+            
+
+        })
+
+        
+    }
+    
     
 
     return (
@@ -119,7 +155,7 @@ export const Cart = () => {
                     <div className='products-box'>
                         <SinglecartProduct cartProducts={cartProducts} Increaseqty={Increaseqty} Decreaseqty={Decreaseqty}/>
                     </div>
-                    <div className='summary-box bg-info'>
+                    <div className='summary-box bg-light'>
                         <h5 className="text-center fw-bold">Cart Summary</h5>
                         <br></br>
                         <div>
@@ -129,15 +165,15 @@ export const Cart = () => {
                         Total Price to Pay: <span>$ {totalPrice}</span>
                         </div>
                         <br></br>
-                        <Link className="text-decoration-none mr-3" to="/">
-                            <button className='btn btn-success btn-md' >Purches</button>
+                        <Link className="text-decoration-none mr-3" to={"/"}>
+                            <button className='btn btn-success btn-md' onClick={handelPurches} >Purches</button>
                         </Link>
                     </div>                                    
                 </div>
                
             )}
             {cartProducts.length < 1 && (
-                <div className='container-fluid'>No products to show</div>
+                <div className='container text-info fs-1 font-weight-bold'>No products to show. . . .</div>
             ) }           
         </>
     )

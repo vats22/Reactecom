@@ -56,8 +56,8 @@ export default function Hader({user}) {
                 </ul>
               </div>
             }
-            {user&&<div class="d-flex">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {user&&<div class="d-flex justify-content-around">
+              <ul class="navbar-nav  mb-2 mb-lg-0">
                 <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="/">{user}</a>
                 </li>
@@ -72,12 +72,15 @@ export default function Hader({user}) {
                 </div>
 
               <form >
-                <button className='btn btn-danger btn-md me-2' onClick={onSingout}>Log Out</button>
+                
 
                 <Link className="text-decoration-none mr-3" to="add-product">
                   <button className='btn btn-info btn-md'>ADD Product</button>
                 </Link>
               </form>
+              <div>
+              <button className='btn btn-danger left btn-md mx-2 float-left' onClick={onSingout}>Log Out</button>
+              </div>
             </div>}
           </div>
         </div>

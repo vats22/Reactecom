@@ -67,6 +67,8 @@ export const Main = (props) => {
             console.log(selectProduct);
             selectProduct = selectProduct;
             selectProduct["qty"]=1;
+            // selectProduct.quantity - 1;
+            // selectProduct = selectProduct.quentity - 1;
             selectProduct["ProductTotalPrice"]= selectProduct.qty * selectProduct.price;
             fs.collection("Cart"+ " " + uid).doc(selectProduct.ID).set(selectProduct).then(()=>{
                 console.log("product add in to the CART");

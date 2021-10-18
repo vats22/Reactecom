@@ -1,4 +1,5 @@
 import React,{useState} from 'react'
+import { Link } from 'react-router-dom';
 import { storage,fs } from '../Config/config';
 
 export const Addproduct = () => {
@@ -109,8 +110,9 @@ export const Addproduct = () => {
                    
                 </>}
                 <br></br>           
-                <div style={{display:'flex', justifyContent:'flex-end'}}>
-                    <button type="submit" className='btn btn-success btn-md'>
+                <div className="btn-box">
+                <span>Go back to <b>Shopping Page</b> <Link className="text-decoration-none" to="/">here</Link> </span>
+                <button type="submit" className='btn btn-success btn-md'>
                     SUBMIT PRODUCT
                     </button>
                 </div>
