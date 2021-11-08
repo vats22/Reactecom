@@ -37,7 +37,7 @@ export default function Hader({user}) {
   return (
     <>
       
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light w-100 p-3">
         <div class="container-fluid">
           <a class="navbar-brand" href="/"> Vat's-Store</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,15 +69,13 @@ export default function Hader({user}) {
                     </span>
                   </Link>
                 <div class="cart-items text-bold">{productTotal}</div>
-                </div>
+              </div>
 
-              <form >
-                
-
+              <div >
                 <Link className="text-decoration-none mr-3" to="add-product">
                   <button className='btn btn-info btn-md'>ADD Product</button>
                 </Link>
-              </form>
+              </div>
               <div>
               <button className='btn btn-danger left btn-md mx-2 float-left' onClick={onSingout}>Log Out</button>
               </div>

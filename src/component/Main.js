@@ -1,50 +1,50 @@
-import React,{ useEffect,useState } from 'react'
-import { auth,fs } from '../Config/config'
+import React, { useEffect, useState } from 'react'
+import { auth, fs } from '../Config/config'
 import Hader from './Hader'
 import { Products } from './Products'
 export const Main = (props) => {
 
-    function CurrentUser(){
-        const[user, setuser] = useState(null);
-        useEffect(()=>{
-            auth.onAuthStateChanged((user)=>{
-                if(user){
+    function CurrentUser() {
+        const [user, setuser] = useState(null);
+        useEffect(() => {
+            auth.onAuthStateChanged((user) => {
+                if (user) {
                     fs.collection('user').doc(user.uid).get()
-                    .then((respons)=>{setuser(respons.data().Name)})
+                        .then((respons) => { setuser(respons.data().Name) })
                 }
-                else{
+                else {
                     setuser(null);
                 }
             })
-        },[])
+        }, [])
         return user;
 
     }
-    
+
     const loginUser = CurrentUser();
     console.log(loginUser);
 
-    const [products, setproducts]=useState('');
+    const [products, setproducts] = useState('');
 
-    const getProducts = async ()=>{
+    const getProducts = async () => {
         const products = await fs.collection('Products').get();
         console.log("fatch products:" + products)
         let myProducts = [];
         console.log("My Products:" + myProducts);
-        for(var product of products.docs){
+        for (var product of products.docs) {
             var data = product.data();
             data.ID = product.id;
-            myProducts.push({...data});
-            if(myProducts.length === products.docs.length){
+            myProducts.push({ ...data });
+            if (myProducts.length === products.docs.length) {
                 setproducts(myProducts);
             }
         }
         console.log("My Products:" + myProducts);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getProducts();
-    },[])
+    }, [])
 
     // gettin current user uid
     function GetUserUid() {
@@ -60,20 +60,20 @@ export const Main = (props) => {
     }
 
     const uid = GetUserUid();
-    
+
     let selectProduct;
     const addTocart = (selectProduct) => {
         if (uid !== null) {
             console.log(selectProduct);
             selectProduct = selectProduct;
-            selectProduct["qty"]=1;
+            selectProduct["qty"] = 1;
             // selectProduct.quantity - 1;
             // selectProduct = selectProduct.quentity - 1;
-            selectProduct["ProductTotalPrice"]= selectProduct.qty * selectProduct.price;
-            fs.collection("Cart"+ " " + uid).doc(selectProduct.ID).set(selectProduct).then(()=>{
+            selectProduct["ProductTotalPrice"] = selectProduct.qty * selectProduct.price;
+            fs.collection("Cart" + " " + uid).doc(selectProduct.ID).set(selectProduct).then(() => {
                 console.log("product add in to the CART");
             })
-           
+
         }
         else {
             props.history.push('/login');
@@ -82,21 +82,21 @@ export const Main = (props) => {
     }
 
     return (
-       <>
+        <>
             <Hader user={loginUser} />
             <br></br>
             {products.length > 0 && (
                 <div className='container'>
                     <h1 className='text-center text-bold font-weight-bold fs-1'>Products</h1>
-                    <hr/>
+                    <hr />
                     <div className='products-box'>
-                        <Products allProducts={products} addTocart={addTocart}/>
+                        <Products allProducts={products} addTocart={addTocart} />
                     </div>
                 </div>
             )}
             {products.length < 1 && (
                 <div className='container text-bold fs-1 '>Please wait....</div>
             )}
-       </>
+        </>
     )
 }

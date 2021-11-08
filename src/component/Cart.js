@@ -7,65 +7,65 @@ import { SinglecartProduct } from './SinglecartProduct';
 
 export const Cart = () => {
 
-    function CurrentUser(){
-        const[user, setuser]= useState(null);
-        useEffect(()=>{
-           auth.onAuthStateChanged((getuser)=>{
-               if(getuser){
-                fs.collection('user').doc(getuser.uid).get().then((response)=>{
-                    setuser(response.data().Name);
-                })
-               }else{
-                   setuser(null);
-               }
-           })
-        },[])
+    function CurrentUser() {
+        const [user, setuser] = useState(null);
+        useEffect(() => {
+            auth.onAuthStateChanged((getuser) => {
+                if (getuser) {
+                    fs.collection('user').doc(getuser.uid).get().then((response) => {
+                        setuser(response.data().Name);
+                    })
+                } else {
+                    setuser(null);
+                }
+            })
+        }, [])
         return user;
 
     }
- 
-    const loginUser= CurrentUser();
 
-    const [cartProducts, setCartProducts]=useState([]);
+    const loginUser = CurrentUser();
+
+    const [cartProducts, setCartProducts] = useState([]);
 
     // getting cart products from firestore collection and updating the state
-    useEffect(()=>{
-        auth.onAuthStateChanged(user=>{
-            if(user){
-                fs.collection('Cart' + " " + user.uid).onSnapshot(snapshot=>{
-                    const newCartProduct = snapshot.docs.map((doc)=>({
+    useEffect(() => {
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                fs.collection('Cart' + " " + user.uid).onSnapshot(snapshot => {
+                    const newCartProduct = snapshot.docs.map((doc) => ({
                         ID: doc.id,
                         ...doc.data(),
                     }));
-                    setCartProducts(newCartProduct);                    
+                    setCartProducts(newCartProduct);
                 })
             }
-            else{
+            else {
                 console.log('user is not signed in to retrieve cart');
             }
         })
-    },[])
+    }, [])
 
     console.log(cartProducts);
 
     // calculate total qty
-    const allqty = cartProducts.map((products)=>{
+    const allqty = cartProducts.map((products) => {
         return products.qty;
     })
 
-    const calculateTotalqty = (a,b)=> a + b;
-    const totalQty = allqty.reduce(calculateTotalqty,0);
+    const calculateTotalqty = (a, b) => a + b;
+    const totalQty = allqty.reduce(calculateTotalqty, 0);
     console.log(totalQty);
 
     //calculate Total Price
-    const allPrice = cartProducts.map((products)=>products.ProductTotalPrice)
-    const calculateTotalprice = (a,b)=> a + b;
-    const totalPrice = allPrice.reduce(calculateTotalprice,0);
+    const allPrice = cartProducts.map((products) => products.ProductTotalPrice)
+    const calculateTotalprice = (a, b) => a + b;
+    const totalPrice = allPrice.reduce(calculateTotalprice, 0);
     console.log(totalPrice);
 
     //Increase qty
     let manegproduct;
-    const Increaseqty=(cartproduct)=>{
+    const Increaseqty = (cartproduct) => {
         // console.log(cartproduct)
         manegproduct = cartproduct;
         console.log("cart qty:" + manegproduct.qty);
@@ -83,29 +83,29 @@ export const Cart = () => {
 
                 } else {
                     console.log("please login")
-            }
-        })
+                }
+            })
         }
-        
+
 
     }
 
     //Decrease qty
-    const Decreaseqty = (cartproduct)=>{
+    const Decreaseqty = (cartproduct) => {
         console.log(cartproduct);
         manegproduct = cartproduct;
-        if(manegproduct.qty > 1){
+        if (manegproduct.qty > 1) {
             manegproduct.qty = manegproduct.qty - 1;
             // manegproduct.quantity = manegproduct.quantity - manegproduct.qty;
             manegproduct.ProductTotalPrice = manegproduct.qty * manegproduct.price;
             console.log("price: " + manegproduct.price)
             console.log(manegproduct);
             // updtae in fs
-            auth.onAuthStateChanged((getuser)=>{
-                if(getuser){
+            auth.onAuthStateChanged((getuser) => {
+                if (getuser) {
                     fs.collection('Cart ' + getuser.uid).doc(cartproduct.ID).update(manegproduct)
-                    .then(()=>console.log("your qty hase been decreased"))
-                }else{
+                        .then(() => console.log("your qty hase been decreased"))
+                } else {
                     console.log("you have to log in")
                 }
             })
@@ -113,68 +113,70 @@ export const Cart = () => {
     }
 
     const history = useHistory();
-    const handelPurches = ()=>{
+    const handelPurches = () => {
         console.log("hello form handel purche:");
-        auth.onAuthStateChanged((getuser)=>{
-            console.log("getuser:" +  getuser.uid)
+        auth.onAuthStateChanged((getuser) => {
+            console.log("getuser:" + getuser.uid)
 
-            if(getuser){
+            if (getuser) {
                 const id = "Cart " + getuser.uid;
                 console.log(id);
                 const ref = fs.collection(id);
                 ref.onSnapshot((snapshot) => {
                     snapshot.docs.forEach((doc) => {
-                      ref.doc(doc.id).delete()
+                        ref.doc(doc.id).delete()
                     })
                 })
+
+                alert("your Cart Itemes Hasbeen Succesfully Purchesed");
                 // setTimeout(()=>{
                 //     console.log("Your Cart Item Successfully Purchesd..");
                 //     history.push('/');
                 // },3000);
 
-            }else{
+            } else {
                 console.log("please log in");
             }
-            
+
 
         })
 
-        
+
     }
-    
-    
+
+
 
     return (
         <>
-            <Hader user={loginUser} />           
+            <Hader user={loginUser} />
             <br></br>
             {cartProducts.length > 0 && (
                 <div className='container'>
                     <h1 className='text-center text-bold font-weight-bold fs-1'>Your Cart</h1>
-                    <hr/>
+                    <hr />
                     <div className='products-box'>
-                        <SinglecartProduct cartProducts={cartProducts} Increaseqty={Increaseqty} Decreaseqty={Decreaseqty}/>
+                        <SinglecartProduct cartProducts={cartProducts} Increaseqty={Increaseqty} Decreaseqty={Decreaseqty} />
                     </div>
                     <div className='summary-box bg-light'>
                         <h5 className="text-center fw-bold">Cart Summary</h5>
                         <br></br>
                         <div>
-                        Total No of Products: <span>{totalQty}</span>
+                            Total No of Products: <span>{totalQty}</span>
                         </div>
                         <div>
-                        Total Price to Pay: <span>$ {totalPrice}</span>
+                            Total Price to Pay: <span>$ {totalPrice}</span>
                         </div>
                         <br></br>
                         <Link className="text-decoration-none mr-3" to={"/"}>
                             <button className='btn btn-success btn-md' onClick={handelPurches} >Purches</button>
                         </Link>
-                    </div>                                    
+                    </div>
                 </div>
-               
+
             )}
             {cartProducts.length < 1 && (
                 <div className='container text-info fs-1 font-weight-bold'>No products to show. . . .</div>
-            ) }           
+            )}
         </>
     )
 }

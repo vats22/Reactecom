@@ -118,10 +118,10 @@ export const Addproduct = () => {
                 </div>
             </form>
             {uploadError&&<>
-                    <br></br>
-                    <div className='error-msg'>{uploadError}</div>
+                <br></br>
+                <div className='error-msg'>{uploadError}</div>
                     
-                </>}
+            </>}
 
         </div>
     )
